@@ -68,6 +68,25 @@ def diff_envs(
     return changes
 
 
+def filter_changes(
+    changes: list[EnvChange],
+    change_type: str,
+) -> list[EnvChange]:
+    """Return only the changes matching the given change_type.
+
+    Args:
+        changes: A list of EnvChange objects to filter.
+        change_type: One of 'added', 'removed', or 'modified'.
+
+    Raises:
+        ValueError: If change_type is not a recognised value.
+    """
+    valid_types = {"added", "removed", "modified"}
+    if change_type not in valid_types:
+        raise ValueError(f"change_type must be one of {valid_types}, got {change_type!r}")
+    return [c for c in changes if c.change_type == change_type]
+
+
 def summary(changes: list[EnvChange]) -> str:
     """Return a human-readable summary string for a list of changes."""
     added = sum(1 for c in changes if c.change_type == "added")
